@@ -65,14 +65,14 @@ namespace CookBookImporter
                 return;
             }
 
-            i -= 1;
+            //i -= 1;
 
-            if (i == 0)
-            {
-                var writer = new CompressingTurtleWriter();
+            //if (i == 0)
+            //{
+            //    var writer = new CompressingTurtleWriter();
 
-                writer.Save(graph, "test.owl"); ;
-            }
+            //    writer.Save(graph, "test.owl"); ;
+            //}
 
             var recipeName = doc.GetElementbyId("firstHeading").InnerText.Split(':').Last();
 

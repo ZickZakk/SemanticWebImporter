@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataExporter", "DataExporter\DataExporter.csproj", "{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookBookImporter", "CookBookImporter\CookBookImporter.csproj", "{B5A39560-372C-49D9-A352-82E603013C7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbPediaImporter", "DbPediaImporter\DbPediaImporter.csproj", "{897F8918-CC80-4F6A-8D93-265C16340CCC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikipediaImporter", "WikipediaImporter\WikipediaImporter.csproj", "{897F8918-CC80-4F6A-8D93-265C16340CCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbPediaImporter", "DbPediaImporter\DbPediaImporter.csproj", "{C01087FB-057F-48D6-9F54-E3A017BDE32E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WineToMatchImporter", "WineToMatchImporter\WineToMatchImporter.csproj", "{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B5A39560-372C-49D9-A352-82E603013C7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B5A39560-372C-49D9-A352-82E603013C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5A39560-372C-49D9-A352-82E603013C7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +25,14 @@ Global
 		{897F8918-CC80-4F6A-8D93-265C16340CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{897F8918-CC80-4F6A-8D93-265C16340CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{897F8918-CC80-4F6A-8D93-265C16340CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C01087FB-057F-48D6-9F54-E3A017BDE32E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C01087FB-057F-48D6-9F54-E3A017BDE32E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C01087FB-057F-48D6-9F54-E3A017BDE32E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C01087FB-057F-48D6-9F54-E3A017BDE32E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
