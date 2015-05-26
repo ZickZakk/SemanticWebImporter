@@ -16,6 +16,8 @@ using VDS.RDF.Parsing;
 
 namespace WineToMatchImporter
 {
+    using Common;
+
     public static class WineToMatchImporter
     {
         private const string CookingTypeId = "wtm:CookingType";
@@ -50,19 +52,20 @@ namespace WineToMatchImporter
 
             // Add Namespaces
             graph.BaseUri = UriFactory.Create("http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#");
+            graph.NamespaceMap.AddNamespace("", UriFactory.Create("http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#"));
             graph.NamespaceMap.AddNamespace("wtm", UriFactory.Create("http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#"));
             graph.NamespaceMap.AddNamespace("owl", UriFactory.Create("http://www.w3.org/2002/07/owl#"));
 
+            graph.CreateOntologyResource(graph.BaseUri).AddType(UriFactory.Create(OntologyHelper.OwlOntology));
+
             //Prepare Classes
             var wineType = graph.CreateOntologyClass(UriFactory.Create(WinetypeId));
-            var wine = graph.CreateOntologyClass(UriFactory.Create(WineId));
             var combination = graph.CreateOntologyClass(UriFactory.Create(CombinationId));
             var cuisine = graph.CreateOntologyClass(UriFactory.Create(CuisineId));
             var cookingType = graph.CreateOntologyClass(UriFactory.Create(CookingTypeId));
             var ingredient = graph.CreateOntologyClass(UriFactory.Create(IngredientId));
 
             wineType.AddType(UriFactory.Create(OntologyHelper.OwlClass));
-            wine.AddType(UriFactory.Create(OntologyHelper.OwlClass));
             combination.AddType(UriFactory.Create(OntologyHelper.OwlClass));
             cuisine.AddType(UriFactory.Create(OntologyHelper.OwlClass));
             cookingType.AddType(UriFactory.Create(OntologyHelper.OwlClass));
@@ -104,9 +107,8 @@ namespace WineToMatchImporter
                     {
                         foreach (var cookingType in cookingTypes.Take(2))
                         {
-                            var combiName = string.Join("_", ingredient.Label.First().Value.Replace('/', '_'), cuisine.Label.First().Value.Replace('/', '_'), cookingType.Label.First().Value.Replace('/', '_'));
-
-                            var combi = graph.CreateIndividual(UriFactory.Create("wtm:" + combiName), UriFactory.Create(CombinationId));
+                            var combi = graph.CreateOntologyResource();
+                            combi.AddType(UriFactory.Create(CombinationId));
                             combi.AddResourceProperty(UriFactory.Create(HasIngredientId), ingredient.Resource, true);
                             combi.AddResourceProperty(UriFactory.Create(HasCookingTypeId), cookingType.Resource, true);
                             combi.AddResourceProperty(UriFactory.Create(HasCuisineId), cuisine.Resource, true);
@@ -127,7 +129,7 @@ namespace WineToMatchImporter
 
                             foreach (var result in json["items"].OrderByDescending(token => token["freq"]).Take(3))
                             {
-                                var wineType = graph.CreateIndividual(UriFactory.Create("wtm:" + result["urlname"]));
+                                var wineType = graph.CreateIndividual(UriFactory.Create("wtm:" + result["urlname"].ToString().ToRdfId()), UriFactory.Create(WinetypeId));
 
                                 combi.AddResourceProperty(UriFactory.Create(MatchesWineTypeId), wineType.Resource, true);
                             }
@@ -166,12 +168,12 @@ namespace WineToMatchImporter
 
             var wineIdSet = new HashSet<string>();
 
-            foreach (var wineTypeNode in wineTypeNodes.Take(3))
+            foreach (var wineTypeNode in wineTypeNodes.Take(2))
             {
                 var wineTypeId = wineTypeNode.Attributes["href"].Value.Split('/').Last();
                 var wineTypeName = wineTypeNode.InnerText;
 
-                var winetype = graph.CreateIndividual(UriFactory.Create("wtm:" + wineTypeId), UriFactory.Create(WinetypeId));
+                var winetype = graph.CreateIndividual(UriFactory.Create("wtm:" + wineTypeId.ToRdfId()), UriFactory.Create(WinetypeId));
                 winetype.AddLabel(wineTypeName);
 
                 var wineDoc = new HtmlDocument();
@@ -198,10 +200,10 @@ namespace WineToMatchImporter
 
             foreach (var node in nodes)
             {
-                var id = node.Attributes["rel"].Value.Replace(' ', '_');
+                var id = node.Attributes["rel"].Value;
                 var name = node.InnerText;
 
-                var individual = graph.CreateIndividual(UriFactory.Create("wtm:" + name), @class);
+                var individual = graph.CreateIndividual(UriFactory.Create("wtm:" + name.ToRdfId()), @class);
                 individual.AddLabel(name);
                 individual.AddLiteralProperty(HasIdId, graph.CreateLiteralNode(id), true);
 

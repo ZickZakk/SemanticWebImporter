@@ -17,6 +17,8 @@ using VDS.RDF.Writing;
 
 namespace WineToMatchImporter
 {
+    using Common;
+
     public static class WineDotComImporter
     {
         private const string WineId = "wdc:Wine";
@@ -24,6 +26,8 @@ namespace WineToMatchImporter
         private const string HasColorId = "wdc:hasColor";
 
         private const string OriginNameId = "wdc:originName";
+
+        private const string HasWineIdId = "wdc:hasWineId";
 
         private static OntologyGraph graph;
 
@@ -36,7 +40,7 @@ namespace WineToMatchImporter
             graph.NamespaceMap.AddNamespace("wdc", UriFactory.Create("http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineDotCom/#"));
             graph.NamespaceMap.AddNamespace("owl", UriFactory.Create("http://www.w3.org/2002/07/owl#"));
 
-            //Prepare Classes
+            // Prepare Classes
             var wine = graph.CreateOntologyClass(UriFactory.Create(WineId));
 
             wine.AddType(UriFactory.Create(OntologyHelper.OwlClass));
@@ -61,7 +65,7 @@ namespace WineToMatchImporter
 
         private static void ImportWines(IEnumerable<string> wineIds)
         {
-            foreach (var wineId in wineIds)
+            foreach (var wineId in wineIds.Take(2))
             {
                 var wineDoc = new HtmlDocument();
                 var client = new WebClient();
@@ -84,10 +88,11 @@ namespace WineToMatchImporter
                 var wineNameId = json["OmnitureProps"].Value<string>("Url").Split('/').ElementAt(4); 
                 var wineOrigin = json["OmnitureProps"].Value<string>("Region").Split(',').Last().Trim().Split('-').First().Trim();
 
-                var wineNode = graph.CreateIndividual(UriFactory.Create("wdc:" + wineNameId), UriFactory.Create(WineId));
+                var wineNode = graph.CreateIndividual(UriFactory.Create("wdc:" + wineNameId.ToRdfId()), UriFactory.Create(WineId));
                 wineNode.AddLabel(wineName);
                 wineNode.AddLiteralProperty(UriFactory.Create(HasColorId), graph.CreateLiteralNode(wineColor), true);
                 wineNode.AddLiteralProperty(UriFactory.Create(OriginNameId), graph.CreateLiteralNode(wineOrigin), true);
+                wineNode.AddLiteralProperty(UriFactory.Create(HasWineIdId), graph.CreateLiteralNode(wineId), true);
             }
         }
     }

@@ -15,6 +15,8 @@ using VDS.RDF.Writing;
 
 namespace CookBookImporter
 {
+    using Common;
+
     public static class RecipesImporter
     {
         private static OntologyGraph graph;
@@ -65,14 +67,14 @@ namespace CookBookImporter
                 return;
             }
 
-            //i -= 1;
+            i -= 1;
 
-            //if (i == 0)
-            //{
-            //    var writer = new CompressingTurtleWriter();
+            if (i == 0)
+            {
+                var writer = new CompressingTurtleWriter();
 
-            //    writer.Save(graph, "test.owl"); ;
-            //}
+                writer.Save(graph, "test.owl"); ;
+            }
 
             var recipeName = doc.GetElementbyId("firstHeading").InnerText.Split(':').Last();
 
@@ -117,7 +119,7 @@ namespace CookBookImporter
                 return;
             }
 
-            var categoryNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + categoryName.Replace(' ', '_')), UriFactory.Create("skos:Concept"));
+            var categoryNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + categoryName.ToRdfId()), UriFactory.Create("skos:Concept"));
 
             var broaderCategories = categoryPage.GetElementbyId("catlinks").Descendants("a").Where(a => !a.InnerText.Contains("Categor")).ToList();
 
@@ -125,7 +127,7 @@ namespace CookBookImporter
             {
                 var broaderCategoryName = broaderCategory.InnerText;
 
-                var broaderCategoryNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + broaderCategoryName.Replace(' ', '_')), UriFactory.Create("skos:Concept"));
+                var broaderCategoryNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + broaderCategoryName.ToRdfId()), UriFactory.Create("skos:Concept"));
 
                 if (!broaderCategoryNode.Label.Any())
                 {
@@ -152,21 +154,21 @@ namespace CookBookImporter
 
         private static void InsertCategoryFromRecipe(string categoryName, string recipeName)
         {
-            var categoryNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + categoryName.Replace(' ', '_')), UriFactory.Create("skos:Concept"));
+            var categoryNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + categoryName.ToRdfId()), UriFactory.Create("skos:Concept"));
 
             if (!categoryNode.Label.Any())
             {
                 categoryNode.AddLabel(categoryName);
             }
 
-            var recipeNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + recipeName.Replace(' ', '_')));
+            var recipeNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + recipeName.ToRdfId()));
 
             recipeNode.AddResourceProperty(UriFactory.Create("dcterms:subject"), categoryNode.Resource, true);
         }
 
         private static void InsertRecipe(string recipeName)
         {
-            var recipe = graph.CreateIndividual(UriFactory.Create("cookbook:" + recipeName.Replace(' ', '_')), UriFactory.Create("cookbook:Recipe"));
+            var recipe = graph.CreateIndividual(UriFactory.Create("cookbook:" + recipeName.ToRdfId()), UriFactory.Create("cookbook:Recipe"));
 
             if (!recipe.Label.Any())
             {

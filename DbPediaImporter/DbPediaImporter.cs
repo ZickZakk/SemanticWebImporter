@@ -44,7 +44,7 @@ namespace DbPediaImporter
             //Use the DBPedia SPARQL endpoint with the default Graph set to DBPedia
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"), "http://dbpedia.org");
             //Make a SELECT query against the Endpoint
-            var results = endpoint.QueryRaw("SELECT DISTINCT ?Concept WHERE {[] a ?Concept}");
+            var results = endpoint.QueryWithResultSet("SELECT DISTINCT ?Concept WHERE {[] a ?Concept}");
 
 
 
