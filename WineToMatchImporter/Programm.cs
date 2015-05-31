@@ -12,7 +12,7 @@ namespace WineToMatchImporter
 
             var writer = new CompressingTurtleWriter();
 
-            writer.Save(graph, "test.owl");
+            writer.Save(graph, "wtm.ttl");
         } 
     }
 }

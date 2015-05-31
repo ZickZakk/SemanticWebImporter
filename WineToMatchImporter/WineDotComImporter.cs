@@ -55,12 +55,17 @@ namespace WineToMatchImporter
             originProperty.AddRange(UriFactory.Create(XmlSpecsHelper.XmlSchemaDataTypeString));
             originProperty.AddDomain(wine);
 
+            var hasWineIdProperty = graph.CreateOntologyProperty(UriFactory.Create(HasWineIdId));
+            hasWineIdProperty.AddType(UriFactory.Create(OntologyHelper.OwlDatatypeProperty));
+            hasWineIdProperty.AddRange(UriFactory.Create(XmlSpecsHelper.XmlSchemaDataTypeString));
+            hasWineIdProperty.AddDomain(wine);
+
             ImportWines(wineIds);
 
 
             var writer = new CompressingTurtleWriter();
 
-            writer.Save(graph, "test2.owl");
+            writer.Save(graph, "wdc.ttl");
         }
 
         private static void ImportWines(IEnumerable<string> wineIds)

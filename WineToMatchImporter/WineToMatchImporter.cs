@@ -72,9 +72,9 @@ namespace WineToMatchImporter
             ingredient.AddType(UriFactory.Create(OntologyHelper.OwlClass));
 
             CreateProperty(combination, cuisine, HasCuisineId, 1);
-            CreateProperty(combination, cuisine, HasCookingTypeId, 1);
-            CreateProperty(combination, cuisine, HasIngredientId, 1);
-            CreateMaxProperty(combination, cuisine, MatchesWineTypeId, 3);
+            CreateProperty(combination, cookingType, HasCookingTypeId, 1);
+            CreateProperty(combination, ingredient, HasIngredientId, 1);
+            CreateMaxProperty(combination, wineType, MatchesWineTypeId, 3);
 
             var idProperty = graph.CreateOntologyProperty(UriFactory.Create(HasIdId));
             idProperty.AddType(UriFactory.Create(OntologyHelper.OwlDatatypeProperty));
@@ -83,6 +83,7 @@ namespace WineToMatchImporter
             var selectionProperty = graph.CreateOntologyProperty(UriFactory.Create(HasSelection));
             selectionProperty.AddType(UriFactory.Create(OntologyHelper.OwlDatatypeProperty));
             selectionProperty.AddRange(UriFactory.Create(XmlSpecsHelper.XmlSchemaDataTypeString));
+            selectionProperty.AddDomain(wineType);
 
             var doc = new HtmlDocument();
             doc.LoadHtml(File.ReadAllText(Path.GetFullPath("Ressources/WineToMatch.html"), Encoding.UTF8));

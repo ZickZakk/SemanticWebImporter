@@ -16,7 +16,7 @@ namespace DbPediaImporter
 
             var writer = new CompressingTurtleWriter();
 
-            writer.Save(graph, "test.owl");
+            writer.Save(graph, "adj.ttl");
         }
     }
 }
