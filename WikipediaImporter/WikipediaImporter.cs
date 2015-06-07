@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region Using
+
+using System;
 using System.Linq;
 using System.Net;
 
@@ -7,6 +9,8 @@ using HtmlAgilityPack;
 using VDS.RDF;
 using VDS.RDF.Ontology;
 using VDS.RDF.Parsing;
+
+#endregion
 
 namespace WikipediaImporter
 {
@@ -45,7 +49,7 @@ namespace WikipediaImporter
 
             var table = doc.GetElementbyId("mw-content-text").Descendants("tr").Select(n => n.Elements("td").Select(e => e.Descendants("a")).ToArray()).ToList();
 
-            for (int i = 2; i < table.Count() - 1; i++)
+            for (var i = 2; i < table.Count() - 1; i++)
             {
                 var countryId = table[i][0].First().GetAttributeValue("href", string.Empty).Split('/').Last();
 
@@ -55,7 +59,7 @@ namespace WikipediaImporter
                 }
 
                 var countryNode = graph.CreateOntologyResource(UriFactory.Create("dbpedia:" + countryId));
-                
+
                 foreach (var adjectiveNode in table[i].Count() > 1 ? table[i][1] : table[i - 1][1])
                 {
                     var countryAdjective = adjectiveNode.InnerText;

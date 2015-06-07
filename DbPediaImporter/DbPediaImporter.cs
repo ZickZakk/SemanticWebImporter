@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region Using
+
+using System;
 
 using VDS.RDF;
 using VDS.RDF.Ontology;
 using VDS.RDF.Query;
+
+#endregion
 
 namespace DbPediaImporter
 {

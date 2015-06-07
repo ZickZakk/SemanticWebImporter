@@ -1,10 +1,14 @@
-﻿using System.IO;
+﻿#region Using
+
+using System.IO;
 
 using VDS.RDF.Writing;
 
+#endregion
+
 namespace WineToMatchImporter
 {
-    public class Programm
+    public class Program
     {
         public static void Main(string[] args)
         {
@@ -13,6 +17,6 @@ namespace WineToMatchImporter
             var writer = new CompressingTurtleWriter();
 
             writer.Save(graph, "wtm.ttl");
-        } 
+        }
     }
 }

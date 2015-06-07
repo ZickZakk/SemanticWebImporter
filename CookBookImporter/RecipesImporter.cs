@@ -1,22 +1,21 @@
-﻿using System;
+﻿#region Using
+
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
+
+using Common;
 
 using HtmlAgilityPack;
 
 using VDS.RDF;
 using VDS.RDF.Ontology;
-using VDS.RDF.Parsing;
-using VDS.RDF.Query.Inference;
-using VDS.RDF.Writing;
+
+#endregion
 
 namespace CookBookImporter
 {
-    using Common;
-
     public static class RecipesImporter
     {
         private static OntologyGraph graph;
@@ -163,7 +162,6 @@ namespace CookBookImporter
 
             if (!recipe.Label.Any())
             {
-
                 recipe.AddLabel(recipeName);
             }
         }

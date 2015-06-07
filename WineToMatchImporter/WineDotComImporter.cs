@@ -1,10 +1,11 @@
-﻿using System;
+﻿#region Using
+
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+
+using Common;
 
 using HtmlAgilityPack;
 
@@ -15,10 +16,10 @@ using VDS.RDF.Ontology;
 using VDS.RDF.Parsing;
 using VDS.RDF.Writing;
 
+#endregion
+
 namespace WineToMatchImporter
 {
-    using Common;
-
     public static class WineDotComImporter
     {
         private const string WineId = "wdc:Wine";
@@ -64,7 +65,6 @@ namespace WineToMatchImporter
 
             ImportWines(wineIds);
 
-
             var writer = new CompressingTurtleWriter();
 
             writer.Save(graph, "wdc.ttl");
@@ -88,11 +88,11 @@ namespace WineToMatchImporter
 
                 var script = wineDoc.DocumentNode.Descendants("script").First();
 
-                var jsonString = script.InnerText.Split('=').Last().TrimEnd(';','\n');
+                var jsonString = script.InnerText.Split('=').Last().TrimEnd(';', '\n');
 
                 var json = JObject.Parse(jsonString);
 
-                var wineNameId = json["OmnitureProps"].Value<string>("Url").Split('/').ElementAt(4); 
+                var wineNameId = json["OmnitureProps"].Value<string>("Url").Split('/').ElementAt(4);
                 var wineOrigin = json["OmnitureProps"].Value<string>("Region").Split(',').Last().Trim().Split('-').First().Trim();
 
                 var wineNode = graph.CreateIndividual(UriFactory.Create("wdc:" + wineNameId.ToRdfId()), UriFactory.Create(WineId));

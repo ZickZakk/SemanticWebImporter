@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#region Using
+
+using System;
+
+#endregion
 
 namespace Common
 {
-    using System.Net;
-
     public static class StringHelper
     {
         public static string ToRdfId(this string id)

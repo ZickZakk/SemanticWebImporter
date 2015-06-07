@@ -9,11 +9,11 @@ using System.Runtime.InteropServices;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
 
-[assembly: AssemblyTitle("WikipediaImporter")]
+[assembly: AssemblyTitle("RunAll")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WikipediaImporter")]
+[assembly: AssemblyProduct("RunAll")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
 
-[assembly: Guid("58150f5f-4a65-456b-877a-26bc6dff902b")]
+[assembly: Guid("33ef07a0-8e81-483f-979d-8fc25561d1c1")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

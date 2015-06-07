@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4AB7ACE4-EAE0-4B48-8BDD-3CD31473B228}</ProjectGuid>
+    <ProjectGuid>{90C1DE28-4D4F-4124-B763-0A0CFD2241C1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WineToMatchImporter</RootNamespace>
-    <AssemblyName>WineToMatchImporter</AssemblyName>
+    <RootNamespace>RunAll</RootNamespace>
+    <AssemblyName>RunAll</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -29,41 +31,33 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dotNetRDF">
-      <HintPath>..\packages\dotNetRDF.1.0.8.3533\lib\net40\dotNetRDF.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
-    <Compile Include="WineDotComImporter.cs" />
-    <Compile Include="WineToMatchImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Ressources\WineToMatch.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{726E64E8-B332-4FF8-BFF8-0B401C48DAA3}</Project>
-      <Name>Common</Name>
+    <ProjectReference Include="..\CookBookImporter\CookBookImporter.csproj">
+      <Project>{b5a39560-372c-49d9-a352-82e603013c7e}</Project>
+      <Name>CookBookImporter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DbPediaImporter\DbPediaImporter.csproj">
+      <Project>{c01087fb-057f-48d6-9f54-e3a017bde32e}</Project>
+      <Name>DbPediaImporter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WikipediaImporter\WikipediaImporter.csproj">
+      <Project>{897f8918-cc80-4f6a-8d93-265c16340ccc}</Project>
+      <Name>WikipediaImporter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WineToMatchImporter\WineToMatchImporter.csproj">
+      <Project>{4ab7ace4-eae0-4b48-8bdd-3cd31473b228}</Project>
+      <Name>WineToMatchImporter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

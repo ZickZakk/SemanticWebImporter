@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#region Using
 
 using VDS.RDF.Writing;
 
+#endregion
+
 namespace DbPediaImporter
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var graph = DbPediaImporter.ImportCountries();
 

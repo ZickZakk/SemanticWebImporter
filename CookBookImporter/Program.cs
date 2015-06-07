@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#region Using
 
-using VDS.RDF;
-using VDS.RDF.Ontology;
 using VDS.RDF.Writing;
+
+#endregion
 
 namespace CookBookImporter
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var graph = RecipesImporter.ImportRecipesFrom("http://en.wikibooks.org/wiki/Category:Recipes_by_origin");
 

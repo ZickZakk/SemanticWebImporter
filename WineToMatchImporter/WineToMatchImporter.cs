@@ -1,10 +1,14 @@
-﻿using System;
+﻿#region Using
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+
+using Common;
 
 using HtmlAgilityPack;
 
@@ -14,10 +18,10 @@ using VDS.RDF;
 using VDS.RDF.Ontology;
 using VDS.RDF.Parsing;
 
+#endregion
+
 namespace WineToMatchImporter
 {
-    using Common;
-
     public static class WineToMatchImporter
     {
         private const string CookingTypeId = "wtm:CookingType";
@@ -29,8 +33,6 @@ namespace WineToMatchImporter
         private const string HasIdId = "wtm:hasId";
 
         private const string MatchesWineTypeId = "wtm:matchesWineType";
-
-        private static OntologyGraph graph;
 
         private const string IngredientId = "wtm:Ingredient";
 
@@ -45,6 +47,8 @@ namespace WineToMatchImporter
         private const string CombinationId = "wtm:Combination";
 
         private const string CuisineId = "wtm:Cuisine";
+
+        private static OntologyGraph graph;
 
         public static Graph ImportFromWineToMatch(string fileDestination)
         {
