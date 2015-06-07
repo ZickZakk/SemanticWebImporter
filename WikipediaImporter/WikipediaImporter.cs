@@ -51,10 +51,10 @@ namespace WikipediaImporter
 
             graph.CreateOntologyResource(graph.BaseUri).AddType(UriFactory.Create(OntologyHelper.OwlOntology));
 
-            var predicate = graph.CreateOntologyProperty(UriFactory.Create("adj:hasAdjective"));
+            var predicate = graph.CreateOntologyProperty(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("adj") + "hasAdjective"));
             predicate.AddType(UriFactory.Create(OntologyHelper.OwlDatatypeProperty));
             predicate.AddRange(UriFactory.Create(XmlSpecsHelper.XmlSchemaDataTypeString));
-            predicate.AddDomain(UriFactory.Create("dbpedia-owl:Country"));
+            predicate.AddDomain(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("dbpedia-owl") + "Country"));
 
             InsertCountries();
             InsertAdjectivesFrom(url);
@@ -87,13 +87,13 @@ namespace WikipediaImporter
                     continue;
                 }
 
-                var countryNode = graph.CreateOntologyResource(UriFactory.Create("dbpedia:" + countryId));
+                var countryNode = graph.CreateOntologyResource(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("dbpedia") + countryId));
 
                 foreach (var adjectiveNode in table[i].Count() > 1 ? table[i][1] : table[i - 1][1])
                 {
                     var countryAdjective = adjectiveNode.InnerText;
 
-                    countryNode.AddLiteralProperty(UriFactory.Create("adj:hasAdjective"), graph.CreateLiteralNode(countryAdjective), true);
+                    countryNode.AddLiteralProperty(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("adj") + "hasAdjective"), graph.CreateLiteralNode(countryAdjective), true);
                 }
             }
         }

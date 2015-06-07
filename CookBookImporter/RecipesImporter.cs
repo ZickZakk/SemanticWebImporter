@@ -33,7 +33,7 @@ namespace CookBookImporter
 
             graph.CreateOntologyResource(graph.BaseUri).AddType(UriFactory.Create(OntologyHelper.OwlOntology));
 
-            graph.CreateOntologyClass(UriFactory.Create("cookbook:Recipe")).AddType(UriFactory.Create(OntologyHelper.OwlClass));
+            graph.CreateOntologyClass(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("cookbook") + "Recipe")).AddType(UriFactory.Create(OntologyHelper.OwlClass));
 
             InsertRecipesFrom(url);
 
@@ -109,7 +109,7 @@ namespace CookBookImporter
                 return;
             }
 
-            var categoryNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + categoryName.ToRdfId()), UriFactory.Create("skos:Concept"));
+            var categoryNode = graph.CreateIndividual(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("cookbook") + categoryName.ToRdfId()), UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("skos") + "Concept"));
 
             var broaderCategories = categoryPage.GetElementbyId("catlinks").Descendants("a").Where(a => !a.InnerText.Contains("Categor")).ToList();
 
@@ -117,14 +117,14 @@ namespace CookBookImporter
             {
                 var broaderCategoryName = broaderCategory.InnerText;
 
-                var broaderCategoryNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + broaderCategoryName.ToRdfId()), UriFactory.Create("skos:Concept"));
+                var broaderCategoryNode = graph.CreateIndividual(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("cookbook") + broaderCategoryName.ToRdfId()), UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("skos") + "Concept"));
 
                 if (!broaderCategoryNode.Label.Any())
                 {
                     broaderCategoryNode.AddLabel(broaderCategoryName);
                 }
 
-                categoryNode.AddResourceProperty(UriFactory.Create("skos:broader"), broaderCategoryNode.Resource, true);
+                categoryNode.AddResourceProperty(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("skos") + "broader"), broaderCategoryNode.Resource, true);
 
                 var broaderCategoryUrl = broaderCategory.GetAttributeValue("href", string.Empty);
 
@@ -144,21 +144,21 @@ namespace CookBookImporter
 
         private static void InsertCategoryFromRecipe(string categoryName, string recipeName)
         {
-            var categoryNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + categoryName.ToRdfId()), UriFactory.Create("skos:Concept"));
+            var categoryNode = graph.CreateIndividual(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("cookbook") + categoryName.ToRdfId()), UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("skos") + "Concept"));
 
             if (!categoryNode.Label.Any())
             {
                 categoryNode.AddLabel(categoryName);
             }
 
-            var recipeNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + recipeName.ToRdfId()));
+            var recipeNode = graph.CreateIndividual(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("cookbook") + recipeName.ToRdfId()));
 
-            recipeNode.AddResourceProperty(UriFactory.Create("dcterms:subject"), categoryNode.Resource, true);
+            recipeNode.AddResourceProperty(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("dcterms") + "subject"), categoryNode.Resource, true);
         }
 
         private static void InsertRecipe(string recipeName)
         {
-            var recipe = graph.CreateIndividual(UriFactory.Create("cookbook:" + recipeName.ToRdfId()), UriFactory.Create("cookbook:Recipe"));
+            var recipe = graph.CreateIndividual(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("cookbook") + recipeName.ToRdfId()), UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("cookbook") + "Recipe"));
 
             if (!recipe.Label.Any())
             {

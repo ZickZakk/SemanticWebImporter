@@ -16,12 +16,12 @@ namespace WikipediaImporter
 
             SaveOnline(graph);
 
-            // SaveOffline(graph);
+            //SaveOffline(graph);
         }
 
         private static void SaveOnline(Graph graph)
         {
-            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "***");
+            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "mnvr463");
 
             var database = server.GetStore("country-adjectives");
 
