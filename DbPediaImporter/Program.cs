@@ -12,9 +12,9 @@ namespace DbPediaImporter
     {
         public static void Main(string[] args)
         {
-            var graph = DbPediaImporter.ImportCountries();
+            // var graph = DbPediaImporter.ImportCountries();
 
-            SaveOnline(graph);
+            // SaveOnline(graph);
 
             // SaveOffline(graph);
         }

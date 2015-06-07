@@ -9,6 +9,7 @@ using HtmlAgilityPack;
 using VDS.RDF;
 using VDS.RDF.Ontology;
 using VDS.RDF.Parsing;
+using VDS.RDF.Query;
 
 #endregion
 
@@ -17,6 +18,25 @@ namespace WikipediaImporter
     public static class WikipediaImporter
     {
         private static OntologyGraph graph;
+
+        private const string Query = 
+            @"CONSTRUCT 
+            { 
+              ?Country dbpedia-owl:populationTotal ?Population .
+              ?Country rdfs:label ?Label 
+            }
+            WHERE 
+            { 
+              select distinct ?Country, Sum(?Population) AS ?Population, ?Label where 
+                                                    { 
+                                                      ?Country  rdf:type dbpedia-owl:Country; 
+                                                                dbpedia-owl:populationTotal ?Population; 
+                                                                dbpedia-owl:demonym ?Adj; 
+                                                                rdfs:label ?Label 
+                                                      FILTER(LANG(?Label) = '' || LANGMATCHES(LANG(?Label), 'en'))
+                                                    }
+                                                    Group By ?Label ?Country
+            }";
 
         public static Graph ImportCountriesAndAdjectives(string url)
         {
@@ -36,9 +56,18 @@ namespace WikipediaImporter
             predicate.AddRange(UriFactory.Create(XmlSpecsHelper.XmlSchemaDataTypeString));
             predicate.AddDomain(UriFactory.Create("dbpedia-owl:Country"));
 
+            InsertCountries();
             InsertAdjectivesFrom(url);
 
             return graph;
+        }
+
+        private static void InsertCountries()
+        {
+            var endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"), "http://dbpedia.org");
+            var response = endpoint.QueryWithResultGraph(Query);
+
+            graph.Merge(response);
         }
 
         private static void InsertAdjectivesFrom(string url)
