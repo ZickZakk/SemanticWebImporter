@@ -21,8 +21,6 @@ namespace CookBookImporter
     {
         private static OntologyGraph graph;
 
-        private static int i = 10;
-
         public static Graph ImportRecipesFrom(string url)
         {
             graph = new OntologyGraph();
@@ -33,6 +31,8 @@ namespace CookBookImporter
             graph.NamespaceMap.AddNamespace("dcterms", UriFactory.Create("http://purl.org/dc/terms/"));
             graph.NamespaceMap.AddNamespace("owl", UriFactory.Create("http://www.w3.org/2002/07/owl#"));
             graph.NamespaceMap.AddNamespace("skos", UriFactory.Create("http://www.w3.org/2004/02/skos/core#"));
+
+            graph.CreateOntologyResource(graph.BaseUri).AddType(UriFactory.Create(OntologyHelper.OwlOntology));
 
             graph.CreateOntologyClass(UriFactory.Create("cookbook:Recipe")).AddType(UriFactory.Create(OntologyHelper.OwlClass));
 
@@ -65,15 +65,6 @@ namespace CookBookImporter
             {
                 // No recipe page
                 return;
-            }
-
-            i -= 1;
-
-            if (i == 0)
-            {
-                var writer = new CompressingTurtleWriter();
-
-                writer.Save(graph, "test.owl"); ;
             }
 
             var recipeName = doc.GetElementbyId("firstHeading").InnerText.Split(':').Last();

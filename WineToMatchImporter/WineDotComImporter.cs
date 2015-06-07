@@ -40,6 +40,8 @@ namespace WineToMatchImporter
             graph.NamespaceMap.AddNamespace("wdc", UriFactory.Create("http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineDotCom/#"));
             graph.NamespaceMap.AddNamespace("owl", UriFactory.Create("http://www.w3.org/2002/07/owl#"));
 
+            graph.CreateOntologyResource(graph.BaseUri).AddType(UriFactory.Create(OntologyHelper.OwlOntology));
+
             // Prepare Classes
             var wine = graph.CreateOntologyClass(UriFactory.Create(WineId));
 
@@ -70,7 +72,7 @@ namespace WineToMatchImporter
 
         private static void ImportWines(IEnumerable<string> wineIds)
         {
-            foreach (var wineId in wineIds.Take(2))
+            foreach (var wineId in wineIds)
             {
                 var wineDoc = new HtmlDocument();
                 var client = new WebClient();

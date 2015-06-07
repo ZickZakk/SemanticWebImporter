@@ -102,11 +102,11 @@ namespace WineToMatchImporter
         {
             using (var client = new WebClient())
             {
-                foreach (var ingredient in ingredients.Take(2))
+                foreach (var ingredient in ingredients)
                 {
-                    foreach (var cuisine in cuisines.Take(2))
+                    foreach (var cuisine in cuisines)
                     {
-                        foreach (var cookingType in cookingTypes.Take(2))
+                        foreach (var cookingType in cookingTypes)
                         {
                             var combi = graph.CreateOntologyResource();
                             combi.AddType(UriFactory.Create(CombinationId));
@@ -128,7 +128,7 @@ namespace WineToMatchImporter
 
                             var json = JObject.Parse(responseString);
 
-                            foreach (var result in json["items"].OrderByDescending(token => token["freq"]).Take(3))
+                            foreach (var result in json["items"].OrderByDescending(token => token["freq"]))
                             {
                                 var wineType = graph.CreateIndividual(UriFactory.Create("wtm:" + result["urlname"].ToString().ToRdfId()), UriFactory.Create(WinetypeId));
 
@@ -169,7 +169,7 @@ namespace WineToMatchImporter
 
             var wineIdSet = new HashSet<string>();
 
-            foreach (var wineTypeNode in wineTypeNodes.Take(2))
+            foreach (var wineTypeNode in wineTypeNodes)
             {
                 var wineTypeId = wineTypeNode.Attributes["href"].Value.Split('/').Last();
                 var wineTypeName = wineTypeNode.InnerText;

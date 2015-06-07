@@ -25,6 +25,8 @@ namespace WikipediaImporter
             graph.NamespaceMap.AddNamespace("dbpedia-owl", UriFactory.Create("http://dbpedia.org/ontology/"));
             graph.NamespaceMap.AddNamespace("owl", UriFactory.Create("http://www.w3.org/2002/07/owl#"));
 
+            graph.CreateOntologyResource(graph.BaseUri).AddType(UriFactory.Create(OntologyHelper.OwlOntology));
+
             var predicate = graph.CreateOntologyProperty(UriFactory.Create("adj:hasAdjective"));
             predicate.AddType(UriFactory.Create(OntologyHelper.OwlDatatypeProperty));
             predicate.AddRange(UriFactory.Create(XmlSpecsHelper.XmlSchemaDataTypeString));
