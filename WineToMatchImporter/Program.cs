@@ -35,7 +35,7 @@ namespace WineToMatchImporter
         {
             var writer = new CompressingTurtleWriter();
 
-            writer.Save(graph, "cookbook.ttl");
+            writer.Save(graph, "wineToMatch.ttl");
         }
     }
 }
