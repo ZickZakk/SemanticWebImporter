@@ -56,7 +56,6 @@ namespace WineToMatchImporter
 
             // Add Namespaces
             graph.BaseUri = UriFactory.Create("http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#");
-            graph.NamespaceMap.AddNamespace("", UriFactory.Create("http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#"));
             graph.NamespaceMap.AddNamespace("wtm", UriFactory.Create("http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#"));
             graph.NamespaceMap.AddNamespace("owl", UriFactory.Create("http://www.w3.org/2002/07/owl#"));
 

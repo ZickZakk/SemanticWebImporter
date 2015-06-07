@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using VDS.RDF;
 using VDS.RDF.Ontology;
 using VDS.RDF.Parsing;
+using VDS.RDF.Storage.Management;
 using VDS.RDF.Writing;
 
 #endregion
@@ -65,9 +66,26 @@ namespace WineToMatchImporter
 
             ImportWines(wineIds);
 
+            SaveOnline();
+
+            // SaveOffline(graph);
+        }
+
+        private static void SaveOnline()
+        {
+            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "***");
+
+            var database = server.GetStore("wineDotCom");
+
+            database.DeleteGraph(graph.BaseUri);
+            database.SaveGraph(graph);
+        }
+
+        private static void SaveOffline()
+        {
             var writer = new CompressingTurtleWriter();
 
-            writer.Save(graph, "wdc.ttl");
+            writer.Save(graph, "wineDotCom.ttl");
         }
 
         private static void ImportWines(IEnumerable<string> wineIds)

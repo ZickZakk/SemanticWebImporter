@@ -1,5 +1,7 @@
 ﻿#region Using
 
+using VDS.RDF;
+using VDS.RDF.Storage.Management;
 using VDS.RDF.Writing;
 
 #endregion
@@ -12,35 +14,23 @@ namespace CookBookImporter
         {
             var graph = RecipesImporter.ImportRecipesFrom("http://en.wikibooks.org/wiki/Category:Recipes_by_origin");
 
-            //var graph = new OntologyGraph();
+            SaveOnline(graph);
 
-            //// Add Namespaces
-            //graph.BaseUri = new Uri("http://www.imn.htwk-leipzig.de/gjenschm/ontologies/cookbook/");
-            //graph.NamespaceMap.AddNamespace("cookbook", UriFactory.Create("http://www.imn.htwk-leipzig.de/gjenschm/ontologies/cookbook/"));
-            //graph.NamespaceMap.AddNamespace("dcterms", UriFactory.Create("http://purl.org/dc/terms/"));
-            //graph.NamespaceMap.AddNamespace("skos", UriFactory.Create("http://www.w3.org/2004/02/skos/core#"));
+            // SaveOffline(graph);
+        }
 
-            //var recipeClass = graph.CreateOntologyClass(UriFactory.Create(graph.BaseUri + "Recipe"));
+        private static void SaveOnline(Graph graph)
+        {
+            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "***");
 
-            //var recipe = recipeClass.CreateIndividual(UriFactory.Create("cookbook:" + "test"));
+            var database = server.GetStore("cookbook");
 
-            //if (!recipe.Label.Any())
-            //{
+            database.DeleteGraph(graph.BaseUri);
+            database.SaveGraph(graph);
+        }
 
-            //    recipe.AddLabel("test");
-            //}
-
-            //var categoryNode = graph.CreateIndividual(UriFactory.Create("cookbook:" + "cat"), UriFactory.Create("skos:Concept"));
-
-            //if (!categoryNode.Label.Any())
-            //{
-            //    categoryNode.AddLabel("cat");
-            //}
-
-            //recipe = graph.CreateIndividual(UriFactory.Create("cookbook:" + "test"));
-
-            //recipe.AddResourceProperty(UriFactory.Create("dcterms:subject"), categoryNode.Resource, true);
-
+        private static void SaveOffline(Graph graph)
+        {
             var writer = new CompressingTurtleWriter();
 
             writer.Save(graph, "cookbook.ttl");
