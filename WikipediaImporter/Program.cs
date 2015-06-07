@@ -21,7 +21,7 @@ namespace WikipediaImporter
 
         private static void SaveOnline(Graph graph)
         {
-            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "mnvr463");
+            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "asd123");
 
             var database = server.GetStore("country-adjectives");
 

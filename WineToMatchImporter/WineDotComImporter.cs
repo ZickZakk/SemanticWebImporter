@@ -73,7 +73,7 @@ namespace WineToMatchImporter
 
         private static void SaveOnline()
         {
-            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "***");
+            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "asd123");
 
             var database = server.GetStore("wineDotCom");
 
