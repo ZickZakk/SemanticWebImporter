@@ -110,6 +110,11 @@ namespace WineToMatchImporter
 
                 var json = JObject.Parse(jsonString);
 
+                if (json["OmnitureProps"].Value<string>("URL").Contains("/gift/"))
+                {
+                    continue;
+                }
+
                 var wineNameId = json["OmnitureProps"].Value<string>("Url").Split('/').ElementAt(4);
                 var wineOrigin = json["OmnitureProps"].Value<string>("Region").Split(',').Last().Trim().Split('-').First().Trim();
 
