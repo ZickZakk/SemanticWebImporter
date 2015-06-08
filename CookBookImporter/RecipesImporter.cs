@@ -182,7 +182,7 @@ namespace CookBookImporter
                 InsertRecipesFrom("http://en.wikibooks.org" + url);
             }
 
-            var recipes = doc.GetElementbyId("mw-pages") == null ? new List<HtmlNode>() : doc.GetElementbyId("mw-pages").Descendants("a");
+            var recipes = doc.GetElementbyId("mw-pages") == null ? new List<HtmlNode>() : doc.GetElementbyId("mw-pages").Descendants("a").Where(link => link.InnerText.StartsWith("Cookbook:"));
 
             foreach (var recipe in recipes)
             {
