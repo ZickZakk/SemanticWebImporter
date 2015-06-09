@@ -23,13 +23,13 @@ namespace WineToMatchImporter
 {
     public static class WineDotComImporter
     {
-        private const string WineId = "wdc:Wine";
+        private static string wineId;
 
-        private const string HasColorId = "wdc:hasColor";
+        private static string hasColorId;
 
-        private const string OriginNameId = "wdc:originName";
+        private static string originNameId;
 
-        private const string HasWineIdId = "wdc:hasWineId";
+        private static string hasWineIdId;
 
         private static OntologyGraph graph;
 
@@ -44,22 +44,27 @@ namespace WineToMatchImporter
 
             graph.CreateOntologyResource(graph.BaseUri).AddType(UriFactory.Create(OntologyHelper.OwlOntology));
 
+            wineId = graph.NamespaceMap.GetNamespaceUri("wdc") + "Wine";
+            hasColorId = graph.NamespaceMap.GetNamespaceUri("wdc") + "hasColor";
+            hasWineIdId = graph.NamespaceMap.GetNamespaceUri("wdc") + "hasWineId";
+            originNameId = graph.NamespaceMap.GetNamespaceUri("wdc") + "originName";
+
             // Prepare Classes
-            var wine = graph.CreateOntologyClass(UriFactory.Create(WineId));
+            var wine = graph.CreateOntologyClass(UriFactory.Create(wineId));
 
             wine.AddType(UriFactory.Create(OntologyHelper.OwlClass));
 
-            var colorProperty = graph.CreateOntologyProperty(UriFactory.Create(HasColorId));
+            var colorProperty = graph.CreateOntologyProperty(UriFactory.Create(hasColorId));
             colorProperty.AddType(UriFactory.Create(OntologyHelper.OwlDatatypeProperty));
             colorProperty.AddRange(UriFactory.Create(XmlSpecsHelper.XmlSchemaDataTypeString));
             colorProperty.AddDomain(wine);
 
-            var originProperty = graph.CreateOntologyProperty(UriFactory.Create(OriginNameId));
+            var originProperty = graph.CreateOntologyProperty(UriFactory.Create(originNameId));
             originProperty.AddType(UriFactory.Create(OntologyHelper.OwlDatatypeProperty));
             originProperty.AddRange(UriFactory.Create(XmlSpecsHelper.XmlSchemaDataTypeString));
             originProperty.AddDomain(wine);
 
-            var hasWineIdProperty = graph.CreateOntologyProperty(UriFactory.Create(HasWineIdId));
+            var hasWineIdProperty = graph.CreateOntologyProperty(UriFactory.Create(hasWineIdId));
             hasWineIdProperty.AddType(UriFactory.Create(OntologyHelper.OwlDatatypeProperty));
             hasWineIdProperty.AddRange(UriFactory.Create(XmlSpecsHelper.XmlSchemaDataTypeString));
             hasWineIdProperty.AddDomain(wine);
@@ -68,7 +73,7 @@ namespace WineToMatchImporter
 
             SaveOnline();
 
-            // SaveOffline(graph);
+            SaveOffline();
         }
 
         private static void SaveOnline()
@@ -110,7 +115,7 @@ namespace WineToMatchImporter
 
                 var json = JObject.Parse(jsonString);
 
-                if (json["OmnitureProps"].Value<string>("URL").Contains("/gift/"))
+                if (json["OmnitureProps"].Value<string>("Url").Contains("/gift/"))
                 {
                     continue;
                 }
@@ -118,11 +123,11 @@ namespace WineToMatchImporter
                 var wineNameId = json["OmnitureProps"].Value<string>("Url").Split('/').ElementAt(4);
                 var wineOrigin = json["OmnitureProps"].Value<string>("Region").Split(',').Last().Trim().Split('-').First().Trim();
 
-                var wineNode = graph.CreateIndividual(UriFactory.Create("wdc:" + wineNameId.ToRdfId()), UriFactory.Create(WineId));
+                var wineNode = graph.CreateIndividual(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("wdc") + wineNameId.ToRdfId()), UriFactory.Create(WineDotComImporter.wineId));
                 wineNode.AddLabel(wineName);
-                wineNode.AddLiteralProperty(UriFactory.Create(HasColorId), graph.CreateLiteralNode(wineColor), true);
-                wineNode.AddLiteralProperty(UriFactory.Create(OriginNameId), graph.CreateLiteralNode(wineOrigin), true);
-                wineNode.AddLiteralProperty(UriFactory.Create(HasWineIdId), graph.CreateLiteralNode(wineId), true);
+                wineNode.AddLiteralProperty(UriFactory.Create(hasColorId), graph.CreateLiteralNode(wineColor), true);
+                wineNode.AddLiteralProperty(UriFactory.Create(originNameId), graph.CreateLiteralNode(wineOrigin), true);
+                wineNode.AddLiteralProperty(UriFactory.Create(hasWineIdId), graph.CreateLiteralNode(wineId), true);
             }
         }
     }

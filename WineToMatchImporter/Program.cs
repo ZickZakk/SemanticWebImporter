@@ -18,7 +18,7 @@ namespace WineToMatchImporter
 
             SaveOnline(graph);
 
-            // SaveOffline(graph);
+            SaveOffline(graph);
         }
 
         private static void SaveOnline(Graph graph)
