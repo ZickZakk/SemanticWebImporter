@@ -1,0 +1,27 @@
+CONSTRUCT 
+{ 
+  ?Country dbpedia-owl:populationTotal ?Population;
+           rdfs:label ?Label ;
+           a dbpedia-owl:Country
+}
+WHERE 
+{
+  {
+    SELECT DISTINCT ?Country COALESCE(COALESCE(?realPopulation, ?otherPopulation), ?francePopulation) AS ?Population ?Label
+    WHERE 
+    {
+      SELECT DISTINCT ?Country, Sum(?realPopulation) AS ?realPopulation, Sum(?otherPopulation) AS ?otherPopulation, Sum(?francePopulation) AS ?francePopulation, ?Label
+      WHERE
+      { 
+        ?Country  rdf:type dbpedia-owl:Country; 
+                  rdfs:label ?Label
+        OPTIONAL { ?Country dbpprop:populationCensus ?otherPopulation }
+        OPTIONAL { ?Country dbpedia-owl:populationTotal ?realPopulation }
+        OPTIONAL { ?Country dbpprop:frTotalPopulationEstimate ?francePopulation }
+        FILTER(LANG(?Label) = '' || LANGMATCHES(LANG(?Label), 'en'))
+      }
+      GROUP BY ?Label ?Country
+    }
+  }
+  FILTER (?Population)
+}

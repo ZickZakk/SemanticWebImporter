@@ -1,0 +1,18 @@
+CONSTRUCT 
+{ 
+  ?Country dbpedia-owl:populationTotal ?Population ;
+           rdfs:label ?Label ;
+           a dbpedia-owl:Country
+}
+WHERE 
+{ 
+  select distinct ?Country, Sum(?Population) AS ?Population, ?Label where 
+  { 
+    ?Country  rdf:type dbpedia-owl:Country; 
+              dbpedia-owl:populationTotal ?Population; 
+              dbpedia-owl:demonym ?Adj; 
+              rdfs:label ?Label 
+    FILTER(LANG(?Label) = '' || LANGMATCHES(LANG(?Label), 'en'))
+  }
+  Group By ?Label ?Country
+}

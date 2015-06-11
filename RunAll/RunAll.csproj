@@ -47,10 +47,6 @@
       <Project>{b5a39560-372c-49d9-a352-82e603013c7e}</Project>
       <Name>CookBookImporter</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DbPediaImporter\DbPediaImporter.csproj">
-      <Project>{c01087fb-057f-48d6-9f54-e3a017bde32e}</Project>
-      <Name>DbPediaImporter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WikipediaImporter\WikipediaImporter.csproj">
       <Project>{897f8918-cc80-4f6a-8d93-265c16340ccc}</Project>
       <Name>WikipediaImporter</Name>

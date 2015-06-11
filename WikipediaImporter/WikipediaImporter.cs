@@ -15,28 +15,11 @@ using VDS.RDF.Query;
 
 namespace WikipediaImporter
 {
+    using System.IO;
+
     public static class WikipediaImporter
     {
         private static OntologyGraph graph;
-
-        private const string Query = 
-            @"CONSTRUCT 
-            { 
-              ?Country dbpedia-owl:populationTotal ?Population .
-              ?Country rdfs:label ?Label 
-            }
-            WHERE 
-            { 
-              select distinct ?Country, Sum(?Population) AS ?Population, ?Label where 
-                                                    { 
-                                                      ?Country  rdf:type dbpedia-owl:Country; 
-                                                                dbpedia-owl:populationTotal ?Population; 
-                                                                dbpedia-owl:demonym ?Adj; 
-                                                                rdfs:label ?Label 
-                                                      FILTER(LANG(?Label) = '' || LANGMATCHES(LANG(?Label), 'en'))
-                                                    }
-                                                    Group By ?Label ?Country
-            }";
 
         public static Graph ImportCountriesAndAdjectives(string url)
         {
@@ -65,7 +48,8 @@ namespace WikipediaImporter
         private static void InsertCountries()
         {
             var endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"), "http://dbpedia.org");
-            var response = endpoint.QueryWithResultGraph(Query);
+            var query = File.ReadAllText("Queries\\Import\\DBPediaCountries.sparql");
+            var response = endpoint.QueryWithResultGraph(query);
 
             graph.Merge(response);
         }
@@ -92,6 +76,11 @@ namespace WikipediaImporter
                 foreach (var adjectiveNode in table[i].Count() > 1 ? table[i][1] : table[i - 1][1])
                 {
                     var countryAdjective = adjectiveNode.InnerText;
+
+                    if (countryAdjective.Length < 4)
+                    {
+                        continue;
+                    }
 
                     countryNode.AddLiteralProperty(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("adj") + "hasAdjective"), graph.CreateLiteralNode(countryAdjective), true);
                 }

@@ -1,0 +1,19 @@
+INSERT 
+{
+  GRAPH <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/internationalWineAndFood/#>
+  {
+  	?wine dbpedia-owl:origin ?country
+  }
+}
+
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineDotCom/#>
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/country-adjectives/#>
+
+WHERE 
+{
+  ?wine a wdc:Wine;         
+        wdc:originName ?originName .
+  ?country a dbpedia-owl:Country ;
+           rdfs:label ?label 
+  FILTER contains(?label, ?originName)
+}

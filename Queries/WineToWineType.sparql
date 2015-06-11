@@ -1,0 +1,19 @@
+INSERT 
+{
+  GRAPH <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/internationalWineAndFood/#>
+  {
+    ?wineType iwf:hasSelection ?wine
+  }
+}
+
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineDotCom/#>
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#>
+
+WHERE 
+{
+  ?wine a wdc:Wine;         
+        wdc:hasWineId ?wdcId .
+  ?wineType a wtm:WineType;
+            wtm:hasSelectionId ?wtmId .
+  FILTER(?wdcId = ?wtmId)
+}

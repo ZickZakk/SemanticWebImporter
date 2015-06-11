@@ -22,6 +22,8 @@ using VDS.RDF.Parsing;
 
 namespace WineToMatchImporter
 {
+    using System.Threading.Tasks;
+
     public static class WineToMatchImporter
     {
         private static string cookingTypeId;
@@ -114,45 +116,98 @@ namespace WineToMatchImporter
 
         private static void ImportCombinations(IList<Individual> ingredients, IList<Individual> cuisines, IList<Individual> cookingTypes)
         {
-            using (var client = new WebClient())
-            {
-                foreach (var ingredient in ingredients)
-                {
-                    foreach (var cuisine in cuisines)
-                    {
-                        foreach (var cookingType in cookingTypes)
-                        {
-                            var combi = graph.CreateOntologyResource();
-                            combi.AddType(UriFactory.Create(combinationId));
-                            combi.AddResourceProperty(UriFactory.Create(hasIngredientId), ingredient.Resource, true);
-                            combi.AddResourceProperty(UriFactory.Create(hasCookingTypeId), cookingType.Resource, true);
-                            combi.AddResourceProperty(UriFactory.Create(hasCuisineId), cuisine.Resource, true);
+            int i = 0;
 
-                            var values = new NameValueCollection();
+                Parallel.ForEach(
+                    ingredients,
+                    ingredient => Parallel.ForEach(
+                        cuisines,
+                        cuisine => Parallel.ForEach(
+                            cookingTypes,
+                            cookingType =>
+                                {
+                                    var values = new NameValueCollection();
 
-                            values["mainval"] = ingredient.GetLiteralProperty(hasIdId).First().Value;
-                            values["weightval"] = "0";
-                            values["flavorval"] = "NaN";
-                            values["cookingval"] = cookingType.GetLiteralProperty(UriFactory.Create(hasIdId)).First().Value;
-                            values["cuisineval"] = cuisine.GetLiteralProperty(UriFactory.Create(hasIdId)).First().Value;
+                                    values["mainval"] =
+                                        ingredient.GetLiteralProperty(hasIdId).First().Value;
+                                    values["weightval"] = "0";
+                                    values["flavorval"] = "NaN";
+                                    values["cookingval"] =
+                                        cookingType.GetLiteralProperty(UriFactory.Create(hasIdId))
+                                            .First()
+                                            .Value;
+                                    values["cuisineval"] =
+                                        cuisine.GetLiteralProperty(UriFactory.Create(hasIdId))
+                                            .First()
+                                            .Value;
 
-                            var response = client.UploadValues("http://www.winetomatch.com/libs/newwine.php", values);
+                                    bool error;
+                                    var json = new JObject();
 
-                            var responseString = Encoding.Default.GetString(response);
+                                    do
+                                    {
+                                        error = false;
+                                        try
+                                        {
+                                            var response =
+                                                new WebClient().UploadValues(
+                                                    "http://www.winetomatch.com/libs/newwine.php",
+                                                    values);
 
-                            var json = JObject.Parse(responseString);
+                                            var responseString = Encoding.Default.GetString(response);
 
-                            foreach (var result in json["items"].OrderByDescending(token => token["freq"]))
-                            {
-                                var wineType = graph.CreateIndividual(UriFactory.Create(graph.NamespaceMap.GetNamespaceUri("wtm") + string.Empty + result["urlname"].ToString().ToRdfId()), UriFactory.Create(winetypeId));
+                                            json = JObject.Parse(responseString);
+                                        }
+                                        catch (Exception)
+                                        {
+                                            error = true;
+                                        }
+                                    }
+                                    while (error);
+                                    
 
-                                combi.AddResourceProperty(UriFactory.Create(matchesWineTypeId), wineType.Resource, true);
-                            }
-                        }
-                    }
-                }
+                                    lock (graph)
+                                    {
+                                        var combi = graph.CreateOntologyResource();
+                                        combi.AddType(UriFactory.Create(combinationId));
+
+
+                                        combi.AddResourceProperty(
+                                            UriFactory.Create(hasIngredientId),
+                                            ingredient.Resource,
+                                            true);
+                                        combi.AddResourceProperty(
+                                            UriFactory.Create(hasCookingTypeId),
+                                            cookingType.Resource,
+                                            true);
+                                        combi.AddResourceProperty(
+                                            UriFactory.Create(hasCuisineId),
+                                            cuisine.Resource,
+                                            true);
+
+                                        foreach (var result in
+                                            json["items"].OrderByDescending(token => token["freq"])
+                                                .Take(3))
+                                        {
+                                            var wineType =
+                                                graph.CreateIndividual(
+                                                    UriFactory.Create(
+                                                        graph.NamespaceMap.GetNamespaceUri("wtm")
+                                                        + string.Empty
+                                                        + result["urlname"].ToString().ToRdfId()),
+                                                    UriFactory.Create(winetypeId));
+
+                                            combi.AddResourceProperty(
+                                                UriFactory.Create(matchesWineTypeId),
+                                                wineType.Resource,
+                                                true);
+                                        }
+                                        i++;
+
+                                        Console.WriteLine("Done #" + i + " : " + string.Join(" ", ingredient.Label.First(), cuisine.Label.First(), cookingType.Label.First()));
+                                    }
+                                })));
             }
-        }
 
         private static void CreateMaxProperty(OntologyClass combination, OntologyClass cuisine, string name, int cardinality)
         {
@@ -206,7 +261,7 @@ namespace WineToMatchImporter
                 wineIdSet.UnionWith(wineIds);
             }
 
-            WineDotComImporter.ImportFromWineDotCom(wineIdSet);
+            // WineDotComImporter.ImportFromWineDotCom(wineIdSet);
         }
 
         private static IEnumerable<Individual> Import(HtmlDocument doc, string anchor, Uri @class)
