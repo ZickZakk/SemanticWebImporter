@@ -41,13 +41,64 @@
     <None Include="Queries\Import\DBPediaCountries.sparql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Queries\Reasoning\RecipeOrigin.sparql">
+    <None Include="Queries\Reasoning\Step1_RecipeCookingType.sparql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Queries\Reasoning\WineOrigin.sparql">
+    <None Include="Queries\Reasoning\Step1_RecipeCookingTypeSpecialBBQSmoked.sparql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Queries\Reasoning\WineToWineType.sparql">
+    <None Include="Queries\Reasoning\Step1_RecipeCookingTypeSpecialBraisedStewSoup.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeCookingTypeSpecialFry.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeCookingTypeSpecialPoachSteam.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeCookingTypeSpecialRoastedBaked.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeCuisine.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeCuisineSpecialBritish.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeCuisineSpecialCajun.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeCuisineSpecialEasternEurope.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeCuisineSpecialMexican.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeCuisineSpecialSpanishProtugese.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeIngredient.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeIngredientSpecialFish.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeIngredientSpecialPastaRice.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeIngredientSpecialShellfish.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_RecipeOrigin.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_WineOrigin.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step1_WineToWineType.sparql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Queries\Reasoning\Step2_RecipeToWineType.sparql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

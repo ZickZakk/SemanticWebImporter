@@ -1,0 +1,44 @@
+INSERT
+{
+  GRAPH <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/internationalWineAndFood/#>
+  {
+    ?recipe iwf:hasCuisine ?cuisine
+  }
+}
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/cookbook/#>
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#>
+WHERE
+{
+  {
+    ?cuisine a wtm:Cuisine ;
+             rdfs:label "Eastern Europe"
+  }
+  .
+  {
+    {
+      ?recipe a cookbook:Recipe ;          
+              dcterms:subject ?cat
+    }
+    OPTIONAL 
+    { 
+      { ?cat skos:broader* ?superCat } .
+      { ?superCat rdfs:label ?catLabel } 
+    }
+  }
+  FILTER 
+  (
+    contains(lcase(?catLabel),lcase("Russian")) ||
+    contains(lcase(?catLabel),lcase("Czech")) ||
+    contains(lcase(?catLabel),lcase("Polish")) ||
+    contains(lcase(?catLabel),lcase("Hungarian")) ||
+    contains(lcase(?catLabel),lcase("Romanian")) ||
+    contains(lcase(?catLabel),lcase("Croatian")) ||
+    contains(lcase(?catLabel),lcase("Lithuanian")) ||
+    contains(lcase(?catLabel),lcase("Estonian")) ||
+    contains(lcase(?catLabel),lcase("Slovenian")) ||
+    contains(lcase(?catLabel),lcase("Bulgarian")) ||
+    contains(lcase(?catLabel),lcase("Ukrainian")) ||
+    contains(lcase(?catLabel),lcase("Serbian")) ||
+    contains(lcase(?catLabel),lcase("Albanian"))
+  )
+}

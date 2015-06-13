@@ -5,8 +5,8 @@ INSERT
     ?recipe dbpedia-owl:origin ?country
   }
 }
-FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/country-adjectives/#>
-FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/cookbook/#>
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/country-adjectives/#>
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/cookbook/#>
 WHERE 
 {
   {
@@ -21,5 +21,5 @@ WHERE
     OPTIONAL { { ?cat skos:broader* ?superCat }
     . { ?superCat rdfs:label ?catLabel } }
   }
-  FILTER contains(?catLabel,?adjective)
+  FILTER contains(lcase(?catLabel),lcase(?adjective))
 }

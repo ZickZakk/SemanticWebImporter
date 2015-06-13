@@ -1,0 +1,29 @@
+INSERT
+{
+  GRAPH <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/internationalWineAndFood/#>
+  {
+    ?recipe iwf:hasIngredient ?ingredient
+  }
+}
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/cookbook/#>
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#>
+WHERE
+{
+  {
+    ?ingredient a wtm:Ingredient ;
+                rdfs:label ?ingredientLabel
+  }
+  .
+  {
+    {
+      ?recipe a cookbook:Recipe ;          
+              dcterms:subject ?cat
+    }
+    OPTIONAL 
+    { 
+      { ?cat skos:broader* ?superCat } .
+      { ?superCat rdfs:label ?catLabel } 
+    }
+  }
+  FILTER contains(lcase(?catLabel),lcase(?ingredientLabel))
+}

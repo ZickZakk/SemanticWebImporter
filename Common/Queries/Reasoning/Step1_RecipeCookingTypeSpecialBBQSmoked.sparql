@@ -1,0 +1,33 @@
+INSERT
+{
+  GRAPH <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/internationalWineAndFood/#>
+  {
+    ?recipe iwf:hasCookingType ?cookingType
+  }
+}
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/cookbook/#>
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#>
+WHERE
+{
+  {
+    ?cookingType a wtm:CookingType ;
+                 rdfs:label "Smoke/BBQ"
+  }
+  .
+  {
+    {
+      ?recipe a cookbook:Recipe ;          
+              dcterms:subject ?cat
+    }
+    OPTIONAL 
+    { 
+      { ?cat skos:broader* ?superCat } .
+      { ?superCat rdfs:label ?catLabel } 
+    }
+  }
+  FILTER 
+  (
+    contains(lcase(?catLabel),lcase("Barbecue")) ||
+    contains(lcase(?catLabel),lcase("Smoked"))
+  )
+}

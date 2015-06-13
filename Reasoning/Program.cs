@@ -68,27 +68,15 @@
         private static void Reasoning(StardogConnector store)
         {
             Console.WriteLine("Starte: Reasoning ...");
-            Console.WriteLine("Starte: Recipe Origin ...");
 
-            // Add origin to Recipes
-            var query = File.ReadAllText("Queries\\Reasoning\\RecipeOrigin.sparql");
-            store.Query(query);
+            foreach (var file in Directory.EnumerateFiles("Queries\\Reasoning\\"))
+            {
+                Console.WriteLine("Starte: " + file + " ...");
 
-            Console.WriteLine("Fertig: Recipe Origin ...");
+                var query = File.ReadAllText(file);
+                store.Query(query);
+            }
 
-            Console.WriteLine("Starte: Wine Origin ...");
-
-            // Add origin to Wines
-            query = File.ReadAllText("Queries\\Reasoning\\WineOrigin.sparql");
-            store.Query(query);
-
-            Console.WriteLine("Starte: Wine Of WineType ...");
-
-            // Match Wines of WineType
-            query = File.ReadAllText("Queries\\Reasoning\\WineToWineType.sparql");
-            store.Query(query);
-
-            Console.WriteLine("Fertig: Wine Of WineType ...");
             Console.WriteLine("Fertig: Reasoning ...");
         }
     }

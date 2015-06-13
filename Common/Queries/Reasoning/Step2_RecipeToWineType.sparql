@@ -1,0 +1,24 @@
+INSERT 
+{
+  GRAPH <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/internationalWineAndFood/#>
+  {
+  	?recipe iwf:matchesWineType ?wineType
+  }
+}
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/internationalWineAndFood/#>
+USING <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#>
+WHERE
+{
+  {
+    ?recipe iwf:hasCookingType ?ct;
+            iwf:hasCuisine ?c;
+            iwf:hasIngredient ?i
+  } .
+  {
+    ?combi a wtm:Combination;
+           wtm:hasCookingType ?ct;
+           wtm:hasCuisine ?c;
+           wtm:hasIngredient ?i;
+           wtm:matchesWineType ?wineType
+  }
+}
