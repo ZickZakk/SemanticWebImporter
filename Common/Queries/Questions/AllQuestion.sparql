@@ -1,0 +1,51 @@
+# Frage: Alle spanischen Weine, die gut zu Rind- und Meeresfrüchten-Gerichten passen,
+#        welche aus Ländern kommen, die höchstens 6 Mio. Einwohner haben
+
+
+SELECT ?wine ?recipe
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/internationalWineAndFood/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineDotCom/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/cookbook/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/country-adjectives/#>
+WHERE
+{
+  {
+    ?recipe a cookbook:Recipe;
+            iwf:matchesWineType ?wineType;
+            iwf:hasIngredient ?ingredient;
+            dbpedia-owl:origin ?recipeCountry
+  }
+  .
+  {
+    ?recipeCountry dbpedia-owl:populationTotal ?population
+  }
+  .
+  {
+    ?ingredient a wtm:Ingredient;
+                rdfs:label ?ingredientLabel
+  }
+  .
+  {
+    ?wineType a wtm:WineType;
+              iwf:hasSelection ?wine
+  }
+  .
+  {
+    ?wine a wdc:Wine;
+          dbpedia-owl:origin ?wineCountry;
+  }
+  .
+  {
+    ?wineCountry rdfs:label "Spain"@en
+  }
+  FILTER 
+  (
+    (
+      ?ingredientLabel = "Beef" ||
+      ?ingredientLabel = "Shellfish"
+    )
+    &&
+    (?population < 6000000)
+  )
+}

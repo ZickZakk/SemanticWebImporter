@@ -13,5 +13,5 @@ WHERE
         wdc:originName ?originName .
   ?country a dbpedia-owl:Country ;
            rdfs:label ?label 
-  FILTER contains(lcase(?originName),lcase(?label))
+  FILTER contains(lcase(?label),lcase(?originName))
 }

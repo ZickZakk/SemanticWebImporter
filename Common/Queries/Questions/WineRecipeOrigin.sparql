@@ -1,0 +1,28 @@
+# Frage: Gib mir Gerichte mit dazu passenden Weinen, wobei Wein und Gericht 
+#        aus dem selben Land kommen sollen.
+
+
+SELECT ?recipe ?wine ?country
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/internationalWineAndFood/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineDotCom/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/cookbook/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/country-adjectives/#>
+WHERE
+{
+  {
+    ?recipe a cookbook:Recipe;
+           dbpedia-owl:origin ?country;
+            iwf:matchesWineType ?wineType
+  }
+  .
+  {
+    ?wineType a wtm:WineType;
+              iwf:hasSelection ?wine
+  }
+  .
+  {
+    ?wine a wdc:Wine;
+          dbpedia-owl:origin ?country
+  }
+}

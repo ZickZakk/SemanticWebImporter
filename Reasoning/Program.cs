@@ -1,4 +1,6 @@
-﻿namespace Reasoning
+﻿using VDS.RDF.Writing;
+
+namespace Reasoning
 {
     using System;
     using System.Collections.Generic;
@@ -17,9 +19,9 @@
 
         static void Main(string[] args)
         {
-            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "asd123");
+            var server = new StardogServer("http://141.57.9.23:5820/", "gjenschmischek", "asd123");
             var connector = new StardogConnector(
-                "http://141.57.9.24:5820/",
+                "http://141.57.9.23:5820/",
                 "internationalWineAndFood",
                 "gjenschmischek",
                 "asd123") { Timeout = int.MaxValue };
@@ -33,6 +35,8 @@
         {
             Console.WriteLine("Starte: DB Merge ...");
 
+            var writer = new CompressingTurtleWriter();
+            
             foreach (var databaseName in dataBases)
             {
                 var database = server.GetStore(databaseName);
@@ -42,6 +46,8 @@
                 var graph = new Graph();
 
                 database.LoadGraph(graph, graphUri);
+
+                writer.Save(graph, databaseName + ".ttl");
 
                 store.DeleteGraph(graphUri);
 

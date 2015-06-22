@@ -1,0 +1,31 @@
+# Frage: Welcher französische Rotwein passt gut zu Gericht xyz?
+
+
+SELECT ?recipe ?wine
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/internationalWineAndFood/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineToMatch/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/wineDotCom/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/cookbook/#>
+FROM <http://www.imn.htwk-leipzig.de/gjenschm/ontologies/country-adjectives/#>
+WHERE
+{
+  {
+    ?recipe a cookbook:Recipe;
+            iwf:matchesWineType ?wineType
+  }
+  .
+  {
+    ?wineType a wtm:WineType;
+              iwf:hasSelection ?wine
+  }
+  .
+  {
+    ?wine a wdc:Wine;
+          dbpedia-owl:origin ?country;
+          wdc:hasColor "red wine"
+  }
+  .
+  {
+    ?country rdfs:label "France"@en
+  }
+}
