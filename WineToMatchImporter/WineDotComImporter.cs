@@ -33,6 +33,10 @@ namespace WineToMatchImporter
 
         private static OntologyGraph graph;
 
+        /// <summary>
+        /// Imports all data of the given wines from wine.com
+        /// </summary>
+        /// <param name="wineIds">wineIds of wine to import</param>
         public static void ImportFromWineDotCom(IEnumerable<string> wineIds)
         {
             graph = new OntologyGraph();
@@ -71,28 +75,15 @@ namespace WineToMatchImporter
 
             ImportWines(wineIds);
 
-            SaveOnline();
+            SaveHelper.SaveOnline(graph, "wineDotCom");
 
-            SaveOffline();
+            // SaveHelper.SaveOffline(graph, "wineDotCom");
         }
 
-        private static void SaveOnline()
-        {
-            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "asd123");
-
-            var database = server.GetStore("wineDotCom");
-
-            database.DeleteGraph(graph.BaseUri);
-            database.SaveGraph(graph);
-        }
-
-        private static void SaveOffline()
-        {
-            var writer = new CompressingTurtleWriter();
-
-            writer.Save(graph, "wineDotCom.ttl");
-        }
-
+        /// <summary>
+        /// Imports all data of the given wines from wine.com
+        /// </summary>
+        /// <param name="wineIds">wineIds of wine to import</param>
         private static void ImportWines(IEnumerable<string> wineIds)
         {
             foreach (var wineId in wineIds)

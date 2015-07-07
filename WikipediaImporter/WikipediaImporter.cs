@@ -21,6 +21,11 @@ namespace WikipediaImporter
     {
         private static OntologyGraph graph;
 
+        /// <summary>
+        /// Imports countries from DBPedia and adjectives from given url
+        /// </summary>
+        /// <param name="url">url to import adjectives from</param>
+        /// <returns>Graph with imported data</returns>
         public static Graph ImportCountriesAndAdjectives(string url)
         {
             graph = new OntologyGraph();
@@ -45,6 +50,9 @@ namespace WikipediaImporter
             return graph;
         }
 
+        /// <summary>
+        /// Runs the SPARQL-Query saved in 'Common\\Queries\\Import' against the DBPedia endpoint to import all countries into the result graph.
+        /// </summary>
         private static void InsertCountries()
         {
             var endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"), "http://dbpedia.org");
@@ -54,6 +62,10 @@ namespace WikipediaImporter
             graph.Merge(response);
         }
 
+        /// <summary>
+        /// Inserts all country adjectives from the given url into the result graph.
+        /// </summary>
+        /// <param name="url">URL to import from</param>
         private static void InsertAdjectivesFrom(string url)
         {
             var doc = new HtmlDocument();

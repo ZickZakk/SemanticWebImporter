@@ -2,6 +2,8 @@
 
 using System.IO;
 
+using Common;
+
 using VDS.RDF;
 using VDS.RDF.Storage.Management;
 using VDS.RDF.Writing;
@@ -12,30 +14,17 @@ namespace WineToMatchImporter
 {
     public class Program
     {
+        /// <summary>
+        /// Starts the import of WineToMatch and Wine.com
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            var graph = WineToMatchImporter.ImportFromWineToMatch(Directory.GetCurrentDirectory());
+            var graph = WineToMatchImporter.ImportFromWineToMatchAndWineDotCom();
 
-            SaveOnline(graph);
+            SaveHelper.SaveOnline(graph, "wineToMatch");
 
-            SaveOffline(graph);
-        }
-
-        private static void SaveOnline(Graph graph)
-        {
-            var server = new StardogServer("http://141.57.9.24:5820/", "gjenschmischek", "asd123");
-
-            var database = server.GetStore("wineToMatch");
-
-            database.DeleteGraph(graph.BaseUri);
-            database.SaveGraph(graph);
-        }
-
-        private static void SaveOffline(Graph graph)
-        {
-            var writer = new CompressingTurtleWriter();
-
-            writer.Save(graph, "wineToMatch.ttl");
+            // SaveHelper.SaveOffline(graph, "wineToMatch");
         }
     }
 }

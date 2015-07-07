@@ -17,6 +17,10 @@ namespace Reasoning
 
         private static string baseUri = "http://www.imn.htwk-leipzig.de/gjenschm/ontologies/";
 
+        /// <summary>
+        /// Starts the Reasoning
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             var server = new StardogServer("http://141.57.9.23:5820/", "gjenschmischek", "asd123");
@@ -31,6 +35,11 @@ namespace Reasoning
             Reasoning(connector);
         }
 
+        /// <summary>
+        /// Merges the different imported Databases into one. Adds the reasoning graph 'iwf'.
+        /// </summary>
+        /// <param name="server">server, where the databases are saved</param>
+        /// <param name="store">storage provider to work with</param>
         private static void MergeDatabases(StardogServer server, IStorageProvider store)
         {
             Console.WriteLine("Starte: DB Merge ...");
@@ -71,6 +80,10 @@ namespace Reasoning
             Console.WriteLine("Fertig: DB Merge ...");
         }
 
+        /// <summary>
+        /// Runs all reasoning queries in 'Common\\Queries\\Reasoning\\' against the merged graph
+        /// </summary>
+        /// <param name="store">store to be used for reasoning</param>
         private static void Reasoning(StardogConnector store)
         {
             Console.WriteLine("Starte: Reasoning ...");

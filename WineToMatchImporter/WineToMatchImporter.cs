@@ -50,7 +50,11 @@ namespace WineToMatchImporter
 
         private static OntologyGraph graph;
 
-        public static Graph ImportFromWineToMatch(string fileDestination)
+        /// <summary>
+        /// Imports all Data From Wine To Match into an ontology graph. Starts import of Wine.com, too.
+        /// </summary>
+        /// <returns>Graph with imported data</returns>
+        public static Graph ImportFromWineToMatchAndWineDotCom()
         {
             graph = new OntologyGraph();
 
@@ -87,10 +91,10 @@ namespace WineToMatchImporter
             cookingType.AddType(UriFactory.Create(OntologyHelper.OwlClass));
             ingredient.AddType(UriFactory.Create(OntologyHelper.OwlClass));
 
-            CreateProperty(combination, cuisine, hasCuisineId, 1);
-            CreateProperty(combination, cookingType, hasCookingTypeId, 1);
-            CreateProperty(combination, ingredient, hasIngredientId, 1);
-            CreateMaxProperty(combination, wineType, matchesWineTypeId, 3);
+            CreateProperty(combination, cuisine, hasCuisineId);
+            CreateProperty(combination, cookingType, hasCookingTypeId);
+            CreateProperty(combination, ingredient, hasIngredientId);
+            CreateProperty(combination, wineType, matchesWineTypeId);
 
             var idProperty = graph.CreateOntologyProperty(UriFactory.Create(hasIdId));
             idProperty.AddType(UriFactory.Create(OntologyHelper.OwlDatatypeProperty));
@@ -105,15 +109,21 @@ namespace WineToMatchImporter
             doc.LoadHtml(File.ReadAllText(Path.GetFullPath("Ressources/WineToMatch.html"), Encoding.UTF8));
 
             ImportWineTypes(doc);
-            var cookingTypes = Import(doc, "cooking", UriFactory.Create(cookingTypeId)).ToList();
-            var cuisines = Import(doc, "cuisine", UriFactory.Create(cuisineId)).ToList();
-            var ingredients = Import(doc, "main", UriFactory.Create(ingredientId)).ToList();
+            var cookingTypes = ImportFromHtmlAnchor(doc, "cooking", UriFactory.Create(cookingTypeId)).ToList();
+            var cuisines = ImportFromHtmlAnchor(doc, "cuisine", UriFactory.Create(cuisineId)).ToList();
+            var ingredients = ImportFromHtmlAnchor(doc, "main", UriFactory.Create(ingredientId)).ToList();
 
             ImportCombinations(ingredients, cuisines, cookingTypes);
 
             return graph;
         }
 
+        /// <summary>
+        /// Imports all combinations of given ingredients, cuisines and cookingTypes and their matching winetypes by using wineToMatch JSON-Api.
+        /// </summary>
+        /// <param name="ingredients">list of ingredients to include in combinations</param>
+        /// <param name="cuisines">list of cuisines to include in combinations</param>
+        /// <param name="cookingTypes">list of cookingTypes to include in combinations</param>
         private static void ImportCombinations(IList<Individual> ingredients, IList<Individual> cuisines, IList<Individual> cookingTypes)
         {
             int i = 0;
@@ -209,29 +219,24 @@ namespace WineToMatchImporter
                                 })));
             }
 
-        private static void CreateMaxProperty(OntologyClass combination, OntologyClass cuisine, string name, int cardinality)
-        {
-            CreateCardinalProperty(combination, cuisine, name, cardinality, "owl:maxCardinality");
-        }
-
-        private static void CreateCardinalProperty(OntologyClass combination, OntologyClass cuisine, string name, int cardinality, string owlCardinality)
+        /// <summary>
+        /// Creates an ObjectPropery with given name, domain and range in the result graph.
+        /// </summary>
+        /// <param name="domainClass">domain class of the property to create</param>
+        /// <param name="rangeClass">range class of the property to create</param>
+        /// <param name="name">name of the property to create</param>
+        private static void CreateProperty(OntologyClass domainClass, OntologyClass rangeClass, string name)
         {
             var predicate = graph.CreateOntologyProperty(UriFactory.Create(name));
             predicate.AddType(UriFactory.Create(OntologyHelper.OwlObjectProperty));
-            predicate.AddDomain(combination);
-            predicate.AddRange(cuisine);
-
-            //var restriction = graph.CreateOntologyClass();
-            //restriction.AddType(UriFactory.Create("owl:Restriction"));
-            //restriction.AddResourceProperty(UriFactory.Create("owl:onProperty"), predicate.Resource, true);
-            //restriction.AddLiteralProperty(UriFactory.Create(owlCardinality), graph.CreateLiteralNode(cardinality.ToString(), UriFactory.Create(XmlSpecsHelper.XmlSchemaDataTypeNonNegativeInteger)), true);
+            predicate.AddDomain(domainClass);
+            predicate.AddRange(rangeClass);
         }
 
-        private static void CreateProperty(OntologyClass combination, OntologyClass cuisine, string name, int cardinality)
-        {
-            CreateCardinalProperty(combination, cuisine, name, cardinality, "owl:cardinality");
-        }
-
+        /// <summary>
+        /// Imports all WineTypes into the result graph. Starts import of Wines from Wine.com, too.
+        /// </summary>
+        /// <param name="doc">Html document to import from</param>
         private static void ImportWineTypes(HtmlDocument doc)
         {
             var wineTypeNodes = doc.GetElementbyId("li_container1").Descendants("a");
@@ -261,12 +266,19 @@ namespace WineToMatchImporter
                 wineIdSet.UnionWith(wineIds);
             }
 
-            // WineDotComImporter.ImportFromWineDotCom(wineIdSet);
+            WineDotComImporter.ImportFromWineDotCom(wineIdSet);
         }
 
-        private static IEnumerable<Individual> Import(HtmlDocument doc, string anchor, Uri @class)
+        /// <summary>
+        /// Imports all descandant "a" of given anchor inside the given Html document to member of given class.
+        /// </summary>
+        /// <param name="doc">Html document to import from</param>
+        /// <param name="anchorName">anchor name to look for descandant "a"</param>
+        /// <param name="class">class of imported member</param>
+        /// <returns>list with imported member of the class</returns>
+        private static IEnumerable<Individual> ImportFromHtmlAnchor(HtmlDocument doc, string anchorName, Uri @class)
         {
-            var nodes = doc.GetElementbyId(anchor).Descendants("a");
+            var nodes = doc.GetElementbyId(anchorName).Descendants("a");
 
             foreach (var node in nodes)
             {

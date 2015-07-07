@@ -4,6 +4,10 @@
 
     internal class Program
     {
+        /// <summary>
+        /// Runs all Importers consecutively
+        /// </summary>
+        /// <param name="args"></param>
         private static void Main(string[] args)
         {
             Console.WriteLine("Starte: Cookbook...");
